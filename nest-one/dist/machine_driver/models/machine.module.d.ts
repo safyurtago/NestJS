@@ -1,0 +1,2 @@
+interface IMachine_Driver {
+}
