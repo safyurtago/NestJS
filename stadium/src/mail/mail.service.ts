@@ -7,14 +7,21 @@ import { Admin } from 'src/admin/models/admin.model';
 export class MailService {
     constructor (private mailerService: MailerService) {}
 
-    async sendUserConfirmation(user: User | Admin) : Promise<void> {
-        let url: string;
-        if (typeof user === typeof User) {
-            url = `${process.env.API_HOST}/api/users/activate/${user.activation_link}`;
-        }
-        else {
-            url = `${process.env.API_HOST}/api/admin/activate/${user.activation_link}`;
-        }
+    async sendUserConfirmation(user: User) : Promise<void> {
+        const url = `${process.env.API_HOST}/api/users/activate/${user.activation_link}`;
+        await this.mailerService.sendMail({
+            to: user.email,
+            subject: "Welcome to Stadium App! Confirm your Email",
+            template: "./confirmation",
+            context: {
+                name: user.first_name,
+                url
+            }
+        })
+    }
+
+    async sendAdminConfirmation(user: Admin) : Promise<void> {
+        const  url = `${process.env.API_HOST}/api/admin/activate/${user.activation_link}`;
         await this.mailerService.sendMail({
             to: user.email,
             subject: "Welcome to Stadium App! Confirm your Email",
@@ -25,4 +32,5 @@ export class MailService {
             }
         })
     }
+
 }

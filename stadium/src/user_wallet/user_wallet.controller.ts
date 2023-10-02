@@ -1,4 +1,3 @@
-import { IsAuthGuard } from './../guards/is-auth.guard';
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { UserWalletService } from './user_wallet.service';
 import { CreateUserWalletDto } from './dto/create-user_wallet.dto';
@@ -8,7 +7,6 @@ import { UpdateUserWalletDto } from './dto/update-user_wallet.dto';
 export class UserWalletController {
   constructor(private readonly userWalletService: UserWalletService) {}
 
-  @UseGuards(IsAuthGuard)
   @Post()
   create(@Body() createUserWalletDto: CreateUserWalletDto) {
     return this.userWalletService.create(createUserWalletDto);

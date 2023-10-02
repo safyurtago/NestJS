@@ -1,9 +1,13 @@
+import { FindUserDto } from './dto/find-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './models/user.model';
 import { UsersService } from './users.service';
-import { Body, Controller, Delete, Get, Param, Patch, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Res, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {Response} from 'express'
+import { CookieGetter } from 'src/decorators/cookie-getter.decorator';
+import { LoginUserDto } from './dto/login-user.dto';
+import { UserGuard } from 'src/guards/user.guard';
 
 @ApiTags('Users')
 @Controller('users')
@@ -31,14 +35,41 @@ export class UsersController {
     @ApiResponse({status: 200, type: User})
     @Post('signin')
     login (
-
-    ) {}
+        @Body() loginUserDto: LoginUserDto,
+        @Res({passthrough: true}) res: Response
+    ) {
+        return this.usersService.login(loginUserDto, res)
+    }
     
+    @ApiOperation({summary: 'logout User'})
+    @ApiResponse({status: 200, type: User})
+    @UseGuards(UserGuard)
+    @HttpCode(HttpStatus.OK)
+    @Post('signout')
+    logout (
+        @CookieGetter('refresh_token') refresh_token: string,
+        @Res({passthrough: true}) res: Response
+    ) {
+        return this.usersService.logout(refresh_token, res)
+    }
+
+    @ApiOperation({summary: 'refresh Token'})
+    @ApiResponse({status: 200, type: User})
+    @Post(':id/refresh')
+    refresh(
+        @Param('id') id: number,
+        @CookieGetter('refresh_token') refreshToken: string,
+        @Res({passthrough: true}) res: Response
+    ) {
+        return this.usersService.refreshToken(id, refreshToken, res)
+    }
+
+
     @ApiOperation({summary: 'Get All Users'})
     @ApiResponse({status: 200, type: [User]})
-    @Get()
-    findAllUsers () {
-        return this.usersService.findAllUsers();
+    @Post('find')
+    findAllUsers (@Body() findUserDto: FindUserDto) {
+        return this.usersService.findAll(findUserDto);
     }
 
     @ApiOperation({summary: 'Get User By ID'})

@@ -6,7 +6,7 @@ import { ValidationPipe } from '@nestjs/common';
 
 const {env} = process;
 
-async function bootstrap() {
+async function bootstrap() {  
 try {
   const config = new DocumentBuilder()
   .setTitle('Stadium finder')

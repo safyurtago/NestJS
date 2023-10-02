@@ -1,0 +1,1 @@
+export const BOT_NAME = 'SFR_BOT_ROBOT'
