@@ -11,6 +11,15 @@ export class BotUpdate {
     return this.botService.start(ctx)
   }
 
+  @On('contact')
+    async onContact(@Ctx() ctx: Context) {
+        return this.botService.onContact(ctx);
+    }
+
+    @Command('stop')
+    async onStop(@Ctx() ctx: Context) {
+        return this.botService.onStop(ctx)
+    }
 
   // @Command('inline_keyboard')
   // async inlineButton(@Ctx() ctx: Context) {

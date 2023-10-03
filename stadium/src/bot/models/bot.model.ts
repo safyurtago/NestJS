@@ -33,7 +33,7 @@ export class Bot extends Model<Bot, IBot> {
     @Column({
         type: DataType.STRING,
     })
-    lastt_name: string
+    last_name: string
     @ApiProperty({example: "+998912210990", description: 'Phone Number',})
     @Column({
         type: DataType.STRING,

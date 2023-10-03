@@ -8,6 +8,7 @@ import {Response} from 'express'
 import { CookieGetter } from 'src/decorators/cookie-getter.decorator';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UserGuard } from 'src/guards/user.guard';
+import { PhoneUserDto } from './dto/phone-user.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -64,6 +65,10 @@ export class UsersController {
         return this.usersService.refreshToken(id, refreshToken, res)
     }
 
+    @Post('/otp')
+    newOtp(@Body() phoneUserDto: PhoneUserDto) {
+    return this.usersService.newOTP(phoneUserDto)
+  }
 
     @ApiOperation({summary: 'Get All Users'})
     @ApiResponse({status: 200, type: [User]})

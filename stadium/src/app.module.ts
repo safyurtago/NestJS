@@ -22,6 +22,8 @@ import { BotModule } from './bot/bot.module';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { BOT_NAME } from './app.constants';
 import { Bot } from './bot/models/bot.model';
+import { Otp } from './otp/models/otp.model';
+import { OtpModule } from './otp/otp.module';
 
 const {env} = process;
 
@@ -48,6 +50,7 @@ const {env} = process;
       // password: env.DATABASE_PASSWORD,
       // database: env.DATABASE_DB_NAME,
       models: [
+        Otp,
         Bot,
         User,
         Admin,
@@ -70,7 +73,8 @@ const {env} = process;
     UserCardModule,
     CommentModule,
     AdminModule,
-    BotModule
+    BotModule,
+    OtpModule
   ],
   controllers: [],
   providers: [],

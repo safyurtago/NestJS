@@ -1,5 +1,5 @@
 import { CreateUserDto } from './dto/create-user.dto';
-import { BadRequestException, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './models/user.model';
@@ -10,13 +10,20 @@ import { MailService } from 'src/mail/mail.service';
 import { LoginUserDto } from './dto/login-user.dto';
 import { FindUserDto } from './dto/find-user.dto';
 import { Op } from 'sequelize';
-
+import { PhoneUserDto } from './dto/phone-user.dto';
+import * as otpGenerator from 'otp-generator'
+import { BotService } from 'src/bot/bot.service';
+import { Otp } from 'src/otp/models/otp.model';
+import { dates, decode, encode } from '../helpers/crypto';
+import { AddMinutesToDate } from 'src/helpers/addMinute';
 
 @Injectable()
 export class UsersService {
     // Constructor
     constructor (
         @InjectModel(User) private readonly userRopository: typeof User,
+        @InjectModel(Otp) private readonly otpRopository: typeof Otp,
+        private readonly botService: BotService,
         private readonly jwtService: JwtService,
         private readonly mailerService: MailService
     ) {}
@@ -194,6 +201,29 @@ export class UsersService {
         if(!user) throw new BadRequestException('User Not Found');
     
         return user;
+      }
+
+    // New OTP
+    
+    async newOTP(phoneUserDto: PhoneUserDto) {
+        const phone_number = phoneUserDto.phone;
+        const otp = otpGenerator.generate(4, {upperCaseAlphabets: false, lowerCaseAlphabets: false, specialChars: false});
+    
+        const isSend = await this.botService.sendOTP(phone_number, otp);
+    
+        if(!isSend) throw new HttpException('Ro\'yhatdan oting!', HttpStatus.BAD_REQUEST);
+    
+        const now = new Date();
+        const expiration_time = AddMinutesToDate(now, 5);
+    
+        await this.otpRopository.destroy({ where: { chesk: phone_number }});
+    
+        const newOtp = await this.otpRopository.create({id: v4(), otp, expiration_time, chesk: phone_number});
+    
+        const details = {timestamp: now, chesk: phone_number, otp_id: newOtp.id};
+        
+        const encoded = await encode(JSON.stringify(details));
+        return { status: 'Success', Details: encoded};
       }
 
     async findUser (id: number) {
