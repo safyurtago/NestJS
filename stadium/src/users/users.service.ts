@@ -6,16 +6,17 @@ import { User } from './models/user.model';
 import { Response } from 'express';
 import * as bcrypt from 'bcrypt';
 import {v4} from 'uuid';
-import { MailService } from 'src/mail/mail.service';
+import { MailService } from '../mail/mail.service';
 import { LoginUserDto } from './dto/login-user.dto';
 import { FindUserDto } from './dto/find-user.dto';
 import { Op } from 'sequelize';
 import { PhoneUserDto } from './dto/phone-user.dto';
 import * as otpGenerator from 'otp-generator'
-import { BotService } from 'src/bot/bot.service';
-import { Otp } from 'src/otp/models/otp.model';
+import { BotService } from '../bot/bot.service';
+import { Otp } from '../otp/models/otp.model';
 import { dates, decode, encode } from '../helpers/crypto';
-import { AddMinutesToDate } from 'src/helpers/addMinute';
+import { AddMinutesToDate } from '../helpers/addMinute';
+import {VerifyOtpDto} from "./dto/verifyOtp.dto";
 
 @Injectable()
 export class UsersService {
@@ -197,7 +198,7 @@ export class UsersService {
         else if(findUserDto.birthday_begin) where['birthday'] = { [Op.gte]: findUserDto.birthday_begin };
         else if(findUserDto.birthday_end) where['birthday'] = { [Op.lte]: findUserDto.birthday_end };
     
-        const user = await User.findAll({ where });
+        const user = await User.findAll({ where , include: {all: true}});
         if(!user) throw new BadRequestException('User Not Found');
     
         return user;
@@ -221,10 +222,101 @@ export class UsersService {
         const newOtp = await this.otpRopository.create({id: v4(), otp, expiration_time, chesk: phone_number});
     
         const details = {timestamp: now, chesk: phone_number, otp_id: newOtp.id};
-        
+
         const encoded = await encode(JSON.stringify(details));
         return { status: 'Success', Details: encoded};
       }
+
+
+    async verifyOtp(verifyOtpDto: VerifyOtpDto) {
+        const {verification_key, otp, chesk} = verifyOtpDto;
+
+        const curentdate = new Date();
+        const decoded = await decode(verification_key);
+        const details = JSON.parse(decoded);
+
+        if(details.chesk != chesk) throw new BadRequestException('OTP Bu Raqamga Ketmagan!');
+
+        const result = await this.otpRopository.findOne({ where: {id: details.otp_id} });
+
+        if(result != null){
+            if(!result.verified) {
+                if(dates.compare(result.expiration_time, curentdate)) {
+                    if(otp === result.otp) {
+                        const user = await this.userRopository.findOne({where: {phone: chesk}});
+                        if(user){
+                            const updatedUser = await this.userRopository.update({ is_owner: true }, { where: {id: user.id}, returning: true });
+
+                            await this.otpRopository.update({ verified: true }, {where: {id: details.otp_id}})
+
+                            const response = {message: 'User updated as owner', user: updatedUser[1][0]};
+                            return response;
+
+                        } else new BadRequestException('User Not Found');
+                    } else{
+                        console.log(otp, result.otp);
+
+                        throw new BadRequestException('OTP is Not Match');
+
+                    }
+                } else throw new BadRequestException('OTP Expired')
+            } else throw new BadRequestException('OTP Alredy Expired')
+        } else throw new BadRequestException('OTP Not Found!');
+
+    }
+
+
+      // Verify OTP
+    // async verifyOTP(verifyOtpDto: VerifyOtpDto) {
+    //     const {verification_key, otp, check} = verifyOtpDto
+    //     const currentDate = new Date();
+    //     const decoded = await decode(verification_key);
+    //     const details = JSON.parse(decoded);
+    //     if (details.chesk != check) {
+    //         throw new BadRequestException('OTP is not sent to this Number');
+    //     }
+    //     const result = await this.otpRopository.findOne({
+    //         where: {id: details.id}
+    //     });
+    //     if (result != null) {
+    //         if (!result.verified) {
+    //             if (dates.compare(result.expiration_time, currentDate)) {
+    //                 if (otp === result.otp) {
+    //                     const user = await this.userRopository.findOne({
+    //                         where: {phone: check}
+    //                     });
+    //                     if (user) {
+    //                         const updatedUser = await this.userRopository.update(
+    //                             {is_owner: true},
+    //                             {where: {id: user.id}, returning: true}
+    //                         );
+    //                         await this.otpRopository.update(
+    //                             {verified: true},
+    //                             {where: {id: details.otp_id}}
+    //                         );
+    //                         {
+    //                            return {
+    //                                message: 'User updated as owner',
+    //                                user: updatedUser[1][0],
+    //                            }
+    //                         }
+    //                     } else {
+    //                         throw new BadRequestException('User Not Found')
+    //                     }
+    //                 } else {
+    //                     throw new BadRequestException('OTP is not match')
+    //                 }
+    //             } else {
+    //                 throw new BadRequestException('OTP expired')
+    //             }
+    //         } else  {
+    //             throw new BadRequestException('OTP already used');
+    //         }
+    //     } else {
+    //         throw new BadRequestException('Otp not found')
+    //     }
+    // }
+
 
     async findUser (id: number) {
         return this.userRopository.findByPk(id, {include: {all: true}})

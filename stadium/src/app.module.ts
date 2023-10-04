@@ -24,6 +24,9 @@ import { BOT_NAME } from './app.constants';
 import { Bot } from './bot/models/bot.model';
 import { Otp } from './otp/models/otp.model';
 import { OtpModule } from './otp/otp.module';
+import { StadiumModule } from './stadium/stadium.module';
+import {Stadium} from "./stadium/models/stadium.model";
+import {UserGuard} from "./guards/user.guard";
 
 const {env} = process;
 
@@ -43,7 +46,7 @@ const {env} = process;
     }),
     SequelizeModule.forRoot({
       dialect: 'postgres',
-      uri: "postgres://taardfja:rcxGYrKxhh_N-MDWADisv6muJXYf6bay@tiny.db.elephantsql.com/taardfja",
+      uri: "postgres://nnpwoede:3SbhD2tv3llKotINVoQiw6cbppcXBW47@rain.db.elephantsql.com/nnpwoede",
       // port: Number(env.DATABASE_PORT),
       // host: env.DATABASE_HOST,
       // username: env.DATABASE_USER,
@@ -58,6 +61,7 @@ const {env} = process;
         Comfort,
         District,
         Category,
+        Stadium,
         UserWallet,
       ],
       autoLoadModels: true,
@@ -74,7 +78,8 @@ const {env} = process;
     CommentModule,
     AdminModule,
     BotModule,
-    OtpModule
+    OtpModule,
+    StadiumModule
   ],
   controllers: [],
   providers: [],

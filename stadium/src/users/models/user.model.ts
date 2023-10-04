@@ -1,6 +1,7 @@
 import { UserWallet } from './../../user_wallet/models/user_wallet.model';
 import { ApiProperty } from "@nestjs/swagger";
 import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
+import {Stadium} from "../../stadium/models/stadium.model";
 
 
 interface UserAttrs {
@@ -108,4 +109,7 @@ export class User extends Model<User, UserAttrs> {
 
     @HasMany(() => UserWallet)
     user_wallets: UserWallet[]
+
+    @HasMany(() => Stadium)
+    stadiums: Stadium[]
 }

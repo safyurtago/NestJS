@@ -24,7 +24,9 @@ export class UserGuard implements CanActivate {
             if(!user) throw new UnauthorizedException('Invalid token provided');
 
             if(!user.is_active) throw new BadRequestException('User is not active');
-    
+
+            req.userId = user.id;
+
             return true;
         } catch (error) {
             throw new UnauthorizedException('Token verify error');

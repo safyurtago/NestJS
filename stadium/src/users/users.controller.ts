@@ -9,6 +9,7 @@ import { CookieGetter } from 'src/decorators/cookie-getter.decorator';
 import { LoginUserDto } from './dto/login-user.dto';
 import { UserGuard } from 'src/guards/user.guard';
 import { PhoneUserDto } from './dto/phone-user.dto';
+import {VerifyOtpDto} from "./dto/verifyOtp.dto";
 
 @ApiTags('Users')
 @Controller('users')
@@ -65,10 +66,18 @@ export class UsersController {
         return this.usersService.refreshToken(id, refreshToken, res)
     }
 
+    // New OTP
     @Post('/otp')
     newOtp(@Body() phoneUserDto: PhoneUserDto) {
     return this.usersService.newOTP(phoneUserDto)
   }
+
+
+    // Verify OTP
+    @Post('verify-otp')
+    verifyOtp(@Body() verifyOtpDto: VerifyOtpDto) {
+        return this.usersService.verifyOtp(verifyOtpDto)
+    }
 
     @ApiOperation({summary: 'Get All Users'})
     @ApiResponse({status: 200, type: [User]})

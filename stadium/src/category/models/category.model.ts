@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { BelongsTo, Column, DataType, ForeignKey, HasMany, Model, Table } from "sequelize-typescript";
+import {Stadium} from "../../stadium/models/stadium.model";
 
 interface ICategory {
     readonly name: string;
@@ -31,4 +32,7 @@ export class Category extends Model<Category, ICategory> {
     parentId: number
     @BelongsTo(() => Category)
     parentCategory: Category
+
+    @HasMany(() => Stadium)
+    stadiums: Stadium[]
 }
