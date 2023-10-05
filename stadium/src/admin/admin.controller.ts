@@ -1,6 +1,6 @@
 import { FindAdminDto } from './dto/find-admin.dto';
 import { LoginAdminDto } from './dto/login-admin.dto';
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, UseGuards, Req } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Response } from 'express';
 import { AdminService } from './admin.service';
@@ -8,6 +8,9 @@ import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
 import { Admin } from './models/admin.model';
 import { CookieGetter } from 'src/decorators/cookie-getter.decorator';
+import { PhoneAdminDto } from './dto/phone-admin.dto';
+import { VerifyOtpDto } from './dto/verifyOtp.dto';
+import { AdminGuard } from '../guards/admin.guard';
 
 @Controller('admin')
 export class AdminController {
@@ -34,13 +37,12 @@ export class AdminController {
     @Body() loginAdminDto: LoginAdminDto,
     @Res({passthrough: true}) res: Response
   ) {
-    console.log(loginAdminDto);
-    
     return this.adminService.login(loginAdminDto, res);
   }
 
   @ApiOperation({summary: 'Logout Admin'})
   @ApiResponse({status: 200, type: [Admin]})
+  @UseGuards(AdminGuard)
   @Post('logout')
   logout (
     @CookieGetter('refresh_token') refreshToken: string,
@@ -51,6 +53,7 @@ export class AdminController {
 
   @ApiOperation({summary: 'Refresh Token'})
   @ApiResponse({status: 200, type: [Admin]})
+  @UseGuards(AdminGuard)
   @Post(':id/refresh')
   refreshToken(
     @Param('id') id: number, @CookieGetter('refresh_token') refreshToken: string, 
@@ -63,6 +66,19 @@ export class AdminController {
   findAll(@Body() findAdminDto: FindAdminDto) {
     return this.adminService.findAll(findAdminDto);
   }
+
+  // Send OTP
+  @Post('send-otp')
+  sendOtp(@Body() phoneAdminOtp: PhoneAdminDto) {
+    return this.adminService.sendOtp(phoneAdminOtp)
+  }
+
+  // Verify OTP
+  @Post('verify-otp')
+  verifyOtp(@Body() verifyOtpDto: VerifyOtpDto) {
+    return this.adminService.verifyOtp(verifyOtpDto);
+  }
+
 
   @Get(':id')
   findOne(@Param('id') id: string) {

@@ -1,5 +1,6 @@
-import { User } from "src/users/models/user.model";
+
 import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import { User } from "../../users/models/user.model";
 
 interface IPost {
     title: string;

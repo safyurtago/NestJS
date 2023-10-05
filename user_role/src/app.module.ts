@@ -24,11 +24,12 @@ import { resolve } from 'path';
     }),
     SequelizeModule.forRoot({
       dialect: 'postgres',
-      host: process.env.DB_HOST,
-      port: +process.env.DB_PORT,
-      username: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME, 
+      uri: "postgres://gmptutao:x6ekCFQ91d5BCitrCqPj4m1BBp0bc1YI@john.db.elephantsql.com/gmptutao",
+      // host: process.env.DB_HOST,
+      // port: +process.env.DB_PORT,
+      // username: process.env.DB_USER,
+      // password: process.env.DB_PASSWORD,
+      // database: process.env.DB_NAME, 
       models: [Role, User, UserRoles, Post],
       autoLoadModels: true,
       logging: true

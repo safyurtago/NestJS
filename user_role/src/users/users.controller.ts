@@ -1,15 +1,16 @@
 import { User } from './models/user.model';
 import { UsersService } from './users.service';
 import { AddRoleDto } from './dto/add-role.dto';
-import { RolesGuard } from 'src/guards/roles.guard';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ActivateUserDto } from './dto/activate-user.dto';
-import { JwtAuthGuard } from 'src/guards/jwt-auth.guards';
-import { UserSelfGuard } from 'src/guards/user-self.guard';
-import { Roles } from 'src/decorators/roles-auth.decorators';
+
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, UseGuards } from '@nestjs/common';
+import { RolesGuard } from '../guards/roles.guard';
+import { JwtAuthGuard } from '../guards/jwt-auth.guards';
+import { UserSelfGuard } from '../guards/user-self.guard';
+import { Roles } from '../decorators/roles-auth.decorators';
 
 @ApiTags('Foydalanuchila')
 @Roles('USER')

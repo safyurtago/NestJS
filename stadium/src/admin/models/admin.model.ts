@@ -8,6 +8,7 @@ interface AdminAttrs {
     telegram_link: string;
     admin_photo: string;
     hashed_password: string;
+    phone_number: string;
     is_creator: boolean;
     is_active: boolean;
     hasher_refresh_token: string;
@@ -54,6 +55,12 @@ export class Admin extends Model<Admin, AdminAttrs> {
         type: DataType.STRING,
     })
     user_photo: string
+
+    @ApiProperty({example: '+998912210990', description: "phone number"})
+    @Column({
+        type: DataType.STRING,
+    })
+    phone_number: string
     
     @ApiProperty({example: 1, description: "unikal ID"})
     @Column({

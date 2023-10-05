@@ -1,7 +1,13 @@
 import { FindAdminDto } from './dto/find-admin.dto';
 import { LoginAdminDto } from './dto/login-admin.dto';
 import { JwtService } from '@nestjs/jwt';
-import { BadRequestException, Injectable, UnauthorizedException, ForbiddenException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+  ForbiddenException,
+  HttpException, HttpStatus
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { MailService } from 'src/mail/mail.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
@@ -10,15 +16,24 @@ import { Admin } from './models/admin.model';
 import * as bcrypt from 'bcrypt';
 import {v4} from 'uuid'
 import { Response } from 'express';
-import { link } from 'fs';
 import { Op } from 'sequelize';
+import {PhoneAdminDto} from "./dto/phone-admin.dto";
+import * as otpGenerator from 'otp-generator'
+import {BotService} from "../bot/bot.service";
+import {AddMinutesToDate} from "../helpers/addMinute";
+import {Otp} from "../otp/models/otp.model";
+import {dates, decode, encode} from "../helpers/crypto";
+import { VerifyOtpDto } from './dto/verifyOtp.dto';
+
 
 @Injectable()
 export class AdminService {
   constructor(
     @InjectModel(Admin) private adminRepository: typeof Admin,
+    @InjectModel(Otp) private otpRepository: typeof Otp,
     private readonly mailService: MailService,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
+    private readonly botService: BotService,
     ) {}
 
     // Register admin
@@ -189,6 +204,89 @@ export class AdminService {
 
     return admins;
   }
+
+
+  // Send OTP
+
+  async sendOtp(phoneAdminDto: PhoneAdminDto) {
+    const phone_number = phoneAdminDto.phone;
+    const otp = await otpGenerator.generate(4, {
+      upperCaseAlphabets: false,
+      lowerCaseAlphabets: false,
+      specialChars: false
+    })
+    const isSend = await this.botService.sendOTP(phone_number, otp);
+    if (!isSend) throw new HttpException('Please Sign Up firstly', HttpStatus.BAD_REQUEST)
+
+    const now = new Date()
+    const expiration_time = AddMinutesToDate(now, 5);
+
+    await this.otpRepository.destroy({where: {chesk: phone_number}})
+
+    const newOtp = await this.otpRepository.create({id: v4(), otp, expiration_time, chesk: phone_number});
+
+    const details = {
+      timestamp: now,
+      chesk: phone_number,
+      otp_id: newOtp.id
+    }
+
+    const encoded = await encode(JSON.stringify(details))
+
+    return {message: 'Success', Details: encoded}
+  }
+
+  // Verify OTP
+  async verifyOtp(verifyOtpDto: VerifyOtpDto) {
+    const {verification_key, otp, chesk} = verifyOtpDto
+    
+    const currentDate = new Date()
+    const decoded = await decode(verification_key)
+    const details = JSON.parse(decoded)
+
+    if (details.chesk != chesk) throw new BadRequestException('Otp Did not send to this Number')
+
+    const result = await this.otpRepository.findOne({where: {id: details.otp_id}})
+
+    if (result != null) {
+      if (!result.verified) {
+        if (dates.compare(result.expiration_time, currentDate)) {
+          if (otp === result.otp) {
+            const admin = await this.adminRepository.findOne({where: {phone_number: chesk}})
+            if (admin) { 
+              const updatedAdmin = await this.adminRepository.update(
+                {is_creator: true},
+                {where: {id: admin.id}, returning: true}
+              )
+              await this.otpRepository.update(
+                {verified: true},
+                {where: {id: details.otp_id}, returning: true}
+              )
+              const response = {
+                message: "Admin updated as owner",
+                admin: updatedAdmin[1][0]
+              }
+              return response
+            } else {
+              throw new BadRequestException('Admin did not found')
+            }
+          } else {
+            throw new BadRequestException('Otps did not match')
+          }
+        } else {
+          throw new BadRequestException('Otp expired')
+        }
+      } else {
+        throw new BadRequestException('Otp already verified')
+      }
+    } else {
+      throw new BadRequestException('Otp did not found')
+    } 
+  
+  }
+
+
+
 
   findOne(id: number) {
     return `This action returns a #${id} admin`;
