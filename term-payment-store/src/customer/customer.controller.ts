@@ -10,6 +10,7 @@ import { CookieGetter } from '../decorators/cookie-getter.decorator';
 import { FindFilteredCustomersDto } from './dto/find-filtered-customers.dto';
 import { CustomerGuard } from '../guards/customer.guard';
 import { AdminGuard } from '../guards/admin.guard';
+import { CustomerSelfGuard } from '../guards/customer-self.guard';
 
 @ApiTags('customer')
 @Controller('customer')

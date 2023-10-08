@@ -5,6 +5,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Category } from './models/category.model';
 import { JwtModule } from '@nestjs/jwt';
 import { Product } from '../product/models/product.model';
+import { AdminGuard } from '../guards/admin.guard';
 
 @Module({
   imports: [
@@ -12,6 +13,6 @@ import { Product } from '../product/models/product.model';
     JwtModule.register({})
   ],
   controllers: [CategoryController],
-  providers: [CategoryService],
+  providers: [CategoryService, AdminGuard],
 })
 export class CategoryModule {}

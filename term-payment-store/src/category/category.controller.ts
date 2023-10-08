@@ -12,7 +12,7 @@ import { AdminGuard } from '../guards/admin.guard';
 @Controller('category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
-
+  
   @ApiOperation({summary: 'Create category'})
   @ApiResponse({status: 201, type: Category})
   @UseGuards(AdminGuard)

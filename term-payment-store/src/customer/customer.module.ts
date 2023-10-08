@@ -7,10 +7,12 @@ import { JwtModule } from '@nestjs/jwt';
 import { MailModule } from '../mail/mail.module';
 import { AdminGuard } from '../guards/admin.guard';
 import { AdminModule } from '../admin/admin.module';
+import { Contract } from '../contract/models/contract.model';
+import { Payment } from '../payment/models/payment.model';
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([Customer]),
+    SequelizeModule.forFeature([Customer, Contract, Payment]),
     JwtModule.register({}),
     MailModule,
     AdminModule,

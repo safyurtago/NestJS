@@ -1,6 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
 import { CustomerProduct } from "../../customer_product/models/customer_product.model";
+import { Contract } from "../../contract/models/contract.model";
+import { Payment } from "../../payment/models/payment.model";
 
 interface ICustomer {
     first_name: string;
@@ -83,4 +85,10 @@ export class Customer extends Model<Customer, ICustomer> {
 
     @HasMany(() => CustomerProduct)
     customer_product: CustomerProduct;
+
+    @HasMany(() => Contract)
+    contract: [Contract];
+
+    @HasMany(() => Payment)
+    payments: [Payment];
 }

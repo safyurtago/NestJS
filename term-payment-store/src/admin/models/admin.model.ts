@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Column, DataType, Model, Table } from "sequelize-typescript";
+import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript";
+import { Contract } from "../../contract/models/contract.model";
 
 // CREATE Admin Interface
 interface IAdmin {
@@ -61,4 +62,7 @@ export class Admin extends Model<Admin, IAdmin> {
     @Column({
         type: DataType.STRING,
     }) activation_link: string;
+
+    @HasMany(() => Contract)
+    contracts: Contract[];
 }
