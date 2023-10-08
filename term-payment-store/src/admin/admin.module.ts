@@ -15,6 +15,7 @@ import { SuperAdminGuard } from '../guards/super-admin.guard';
     JwtModule.register({})
   ],
   controllers: [AdminController],
-  providers: [AdminService, AdminGuard, SuperAdminGuard],
+  providers: [AdminService],
+  exports: [AdminService]
 })
 export class AdminModule {}

@@ -212,7 +212,7 @@ export class CustomerService {
 
   // FIND Customer BY ID
   async findOneById (id: number, req: Request) {
-    const findCustomer = await this.customerRepository.findByPk(id)
+    const findCustomer = await this.customerRepository.findByPk(id, {include: {all: true}})
     return findCustomer
   }
 

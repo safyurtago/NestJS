@@ -13,9 +13,10 @@ import { AdminModule } from '../admin/admin.module';
     SequelizeModule.forFeature([Customer]),
     JwtModule.register({}),
     MailModule,
+    AdminModule,
   ],
   controllers: [CustomerController],
   providers: [CustomerService],
-  exports: [],
+  exports: [CustomerService],
 })
 export class CustomerModule {}

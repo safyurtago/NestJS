@@ -72,7 +72,7 @@ export class CustomerController {
   // FIND FILTERED CUSTOMERS
   @ApiOperation({summary: 'Find filtered customers'})
   @ApiResponse({status: 200, type: [Customer]})
-  @UseGuards(AdminGuard)
+  // @UseGuards(AdminGuard)
   @Post('findall')
   findFilteredAdmins (
     @Body() findFilteredCustomersDto: FindFilteredCustomersDto,
@@ -94,7 +94,7 @@ export class CustomerController {
   // DELETE CUSTOMER BY ID
   @ApiOperation({summary: 'Delete customer by ID'})
   @ApiResponse({status: 200, type: Customer})
-  @UseGuards(AdminGuard)
+  // @UseGuards(AdminGuard)
   @Delete('delete/:id')
   deleteAdminById (
     @Param('id') id: number
@@ -105,7 +105,7 @@ export class CustomerController {
   // UPDATE CUSTOMER BY ID
   @ApiOperation({summary: 'Update customer by ID'})
   @ApiResponse({status: 200, type: Customer})
-  @UseGuards(AdminGuard)
+  // @UseGuards(AdminGuard)
   @Put('update/:id')
   updateAdminById (
     @Param('id') id: number,

@@ -7,6 +7,7 @@ import { InjectModel } from "@nestjs/sequelize";
 export class AdminGuard implements CanActivate {
     constructor(
         private readonly jwtService: JwtService,
+        // @InjectModel(Admin) private readonly adminRepository: typeof Admin, // MUST CHECK THIS
         ) {}
     async canActivate(context: ExecutionContext){
         const req = context.switchToHttp().getRequest();
@@ -23,6 +24,10 @@ export class AdminGuard implements CanActivate {
             const admin: Partial<Admin> = await this.jwtService.verify(token, {
                 secret: process.env.ACCESS_TOKEN_KEY
             });
+
+            // const findAdmin = await this.adminRepository.findByPk(admin.id)
+            // if (!findAdmin) throw new UnauthorizedException('Admin Not Found');   // MUST CHECK THIS
+            
 
             if(!admin) throw new UnauthorizedException('Invalid token provided');
 

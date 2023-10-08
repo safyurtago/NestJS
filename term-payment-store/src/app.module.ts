@@ -8,6 +8,13 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { CustomerModule } from './customer/customer.module';
 import { Customer } from './customer/models/customer.model';
 import { AdminGuard } from './guards/admin.guard';
+import { AdminService } from './admin/admin.service';
+import { CategoryModule } from './category/category.module';
+import { Category } from './category/models/category.model';
+import { ProductModule } from './product/product.module';
+import { Product } from './product/models/product.model';
+import { CustomerProductModule } from './customer_product/customer_product.module';
+import { CustomerProduct } from './customer_product/models/customer_product.model';
 
 const {env} = process;
 
@@ -24,15 +31,22 @@ const {env} = process;
       autoLoadModels: true,
       logging: false,
       models: [
+        Product,
         Admin,
-        Customer
+        Customer,
+        Category,
+        CustomerProduct
       ],
     }),
     AdminModule,
     MailModule,
-    CustomerModule
+    CustomerModule,
+    CategoryModule,
+    ProductModule,
+    CustomerProductModule
   ],
   controllers: [],
   providers: [JwtService],
+  exports: []
 })
 export class AppModule {}
