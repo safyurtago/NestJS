@@ -60,7 +60,7 @@ export class AdminController {
   }
 
   // REFRESH TOKEN
-  @UseGuards(AdminGuard)
+  // @UseGuards(AdminGuard)
   @Post(':id/refresh-token')
   async refreshToken(
     @Param('id') admin_id: number,

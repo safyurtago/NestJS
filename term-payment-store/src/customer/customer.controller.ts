@@ -60,7 +60,7 @@ export class CustomerController {
 
   // REFRESH TOKEN
   @Post(':id/refresh-token')
-  @UseGuards(CustomerGuard)
+  // @UseGuards(CustomerGuard)
   async refreshToken(
     @Param('id') customer_id: number,
     @CookieGetter('refresh_token') refreshToken: string,
