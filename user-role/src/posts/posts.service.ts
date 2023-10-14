@@ -4,7 +4,8 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Post } from './models/posts.model';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { CreatePostDto } from './dto/create-post.dto';
-import { FilesService } from 'src/files/files.service';
+import { FilesService } from '../files/files.service';
+
 
 @Injectable()
 export class PostsService {

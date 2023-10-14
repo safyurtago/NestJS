@@ -18,8 +18,8 @@ export class UsersService {
     if(!role) {
       throw new BadRequestException('Role not found')
     }
-    await newUser.$set('roles', [role.id]);
-    await newUser.save();
+    // await newUser.$set('roles', [role.id]);
+    // await newUser.save();
     newUser.roles = [role]
 
     return newUser;
@@ -41,7 +41,7 @@ export class UsersService {
     return `This action updates a #${id} user`;
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<number> {
     return await this.userRepo.destroy({where: {id}});
   }
 

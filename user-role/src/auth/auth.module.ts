@@ -13,7 +13,7 @@ import { UsersModule } from '../users/users.module';
         expiresIn: '24h'
       },
       //global: true
-    })
+    }),
   ],
   controllers: [AuthController],
   providers: [AuthService],
