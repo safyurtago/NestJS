@@ -10,6 +10,7 @@ import { AnimalTypeModule } from './animal_type/animal_type.module';
 import { AnimalModule } from './animal/animal.module';
 import { VaccineModule } from './vaccine/vaccine.module';
 import { VaccinationHistoryModule } from './vaccination_history/vaccination_history.module';
+import { AnimalInfoModule } from './animal_info/animal_info.module';
 
 
 
@@ -29,6 +30,7 @@ import { VaccinationHistoryModule } from './vaccination_history/vaccination_hist
     AnimalModule,
     VaccineModule,
     VaccinationHistoryModule,
+    AnimalInfoModule,
   ],
   controllers: [],
   providers: [],

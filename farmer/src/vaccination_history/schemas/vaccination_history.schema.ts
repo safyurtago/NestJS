@@ -12,8 +12,11 @@ export class VaccinationHistory {
   animal_id: Animal;
   @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'Vaccine'})
   vaccine_id: Vaccine;
+  @Prop()
   date: Date;
+  @Prop()
   next_date: Date;
+  @Prop()
   photo_url: string;
   @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'Worker'})
   worker_id: Worker;

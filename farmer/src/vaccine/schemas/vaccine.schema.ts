@@ -11,7 +11,7 @@ export class Vaccine {
   @Prop()
   name: string
   @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'VaccinationHistory'}]})
-  vaccination_history: VaccinationHistory
+  vaccination_history: VaccinationHistory[];
 }
 
 export const VaccineSchema = SchemaFactory.createForClass(Vaccine);

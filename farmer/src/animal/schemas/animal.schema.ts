@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { HydratedDocument } from "mongoose";
 import { AnimalType } from "../../animal_type/schemas/animal_type.schema";
 import { VaccinationHistory } from "../../vaccination_history/schemas/vaccination_history.schema";
+import { AnimalInfo } from "../../animal_info/schemas/animal_info.schema";
 
 export type AnimalDocument = HydratedDocument<Animal>;
 
@@ -15,7 +16,10 @@ export class Animal {
   name: string;
 
   @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'VaccinationHistory'}]})
-  vaccination_history: VaccinationHistory[]
+  vaccination_history: VaccinationHistory[];
+
+  @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'AnimalInfo'}]})
+  animal_info: AnimalInfo[];
 }
 
 export const AnimalSchema = SchemaFactory.createForClass(Animal);
