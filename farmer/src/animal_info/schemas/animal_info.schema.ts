@@ -21,7 +21,7 @@ export class AnimalInfo {
   block_id: Block[];
   @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'Animal'})
   animal_id: Animal[];
-  @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'Animal'})
+  @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'Animal', default: null})
   parent_id: Animal[];
 }
 

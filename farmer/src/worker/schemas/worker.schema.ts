@@ -3,6 +3,7 @@ import mongoose, { HydratedDocument } from "mongoose";
 import { Speciality } from "../../speciality/schemas/speciality.schema";
 import { WorkerBlock } from "../../worker_block/schemas/worker_block.schema";
 import { VaccinationHistory } from "../../vaccination_history/schemas/vaccination_history.schema";
+import { Feeding } from "../../feeding/schemas/feeding.schema";
 
 export type WorkerDocument = HydratedDocument<Worker>;
 
@@ -34,6 +35,9 @@ export class Worker {
   
   @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'VaccinationHistory'}]})
   vaccination_history: VaccinationHistory[];
+
+  @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Feeding'}]})
+  feeding: Feeding[];
 }
 
 export const WorkerSchema = SchemaFactory.createForClass(Worker);

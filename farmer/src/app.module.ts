@@ -11,6 +11,8 @@ import { AnimalModule } from './animal/animal.module';
 import { VaccineModule } from './vaccine/vaccine.module';
 import { VaccinationHistoryModule } from './vaccination_history/vaccination_history.module';
 import { AnimalInfoModule } from './animal_info/animal_info.module';
+import { FeedingModule } from './feeding/feeding.module';
+import { RecordsOfFeedingModule } from './records_of_feeding/records_of_feeding.module';
 
 
 
@@ -31,6 +33,8 @@ import { AnimalInfoModule } from './animal_info/animal_info.module';
     VaccineModule,
     VaccinationHistoryModule,
     AnimalInfoModule,
+    FeedingModule,
+    RecordsOfFeedingModule,
   ],
   controllers: [],
   providers: [],
