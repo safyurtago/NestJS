@@ -19,16 +19,16 @@ export class MeatProductionController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.meatProductionService.findOne(+id);
+    return this.meatProductionService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateMeatProductionDto: UpdateMeatProductionDto) {
-    return this.meatProductionService.update(+id, updateMeatProductionDto);
+    return this.meatProductionService.update(id, updateMeatProductionDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.meatProductionService.remove(+id);
+    return this.meatProductionService.remove(id);
   }
 }

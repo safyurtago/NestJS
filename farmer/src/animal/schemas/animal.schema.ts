@@ -6,6 +6,8 @@ import { AnimalInfo } from "../../animal_info/schemas/animal_info.schema";
 import { Feeding } from "../../feeding/schemas/feeding.schema";
 import { RecordsOfIllness } from "../../records_of_illness/schemas/records_of_illness.schema";
 import { MeatProduction } from "../../meat_production/schemas/meat_production.schema";
+import { FiberProduction } from "../../fiber_production/schemas/fiber_production.schema";
+import { MilkProduction } from "../../milk_production/schemas/milk_production.schema";
 
 export type AnimalDocument = HydratedDocument<Animal>;
 
@@ -32,6 +34,12 @@ export class Animal {
 
   @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'MeatProduction'}]})
   meat_production: MeatProduction[];
+
+  @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'FiberProduction'}]})
+  fiber_production: FiberProduction[];
+
+  @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'MilkProduction'}]})
+  milk_production: MilkProduction[];
 }
 
 export const AnimalSchema = SchemaFactory.createForClass(Animal);
