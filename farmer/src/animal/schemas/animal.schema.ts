@@ -4,6 +4,8 @@ import { AnimalType } from "../../animal_type/schemas/animal_type.schema";
 import { VaccinationHistory } from "../../vaccination_history/schemas/vaccination_history.schema";
 import { AnimalInfo } from "../../animal_info/schemas/animal_info.schema";
 import { Feeding } from "../../feeding/schemas/feeding.schema";
+import { RecordsOfIllness } from "../../records_of_illness/schemas/records_of_illness.schema";
+import { MeatProduction } from "../../meat_production/schemas/meat_production.schema";
 
 export type AnimalDocument = HydratedDocument<Animal>;
 
@@ -24,6 +26,12 @@ export class Animal {
 
   @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Feeding'}]})
   feeding: Feeding[];
+
+  @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'RecordsOfIllness'}]})
+  records_of_illness: RecordsOfIllness[];
+
+  @Prop({type: [{type: mongoose.Schema.Types.ObjectId, ref: 'MeatProduction'}]})
+  meat_production: MeatProduction[];
 }
 
 export const AnimalSchema = SchemaFactory.createForClass(Animal);
