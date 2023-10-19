@@ -1,0 +1,100 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Category {
+  id: ID!
+  name: String!
+}
+
+input CreateCategoryDto {
+  name: String!
+}
+
+input CreateProductDto {
+  amount: Float!
+  description: String
+  name: String!
+  photo: String
+}
+
+input CreateShopDto {
+  name: String!
+}
+
+input CreateUserDto {
+  email: String!
+  name: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  createCategory(createCategory: CreateCategoryDto!): Category!
+  createProduct(createProduct: CreateProductDto!): Product!
+  createShop(createShop: CreateShopDto!): Shop!
+  createUser(createUser: CreateUserDto!): User!
+  removeCategory(id: ID!): Float!
+  removeProduct(id: ID!): Float!
+  removeShop(id: ID!): Float!
+  removeUser(id: ID!): Float!
+  updateCategory(id: ID!, updateCategory: UpdateCategoryDto!): Category!
+  updateProduct(id: Float!, updateProduct: UpdateProductDto!): Product!
+  updateShop(id: ID!, updateShop: UpdateShopDto!): Shop!
+  updateUser(id: ID!, updateUser: UpdateUserDto!): User!
+}
+
+type Product {
+  amount: Float!
+  description: String
+  id: ID!
+  name: String!
+  photo: String
+}
+
+type Query {
+  findAllCategory: [Category!]!
+  findAllProduct: [Product!]!
+  findAllShop: [Shop!]!
+  findAllUser: [User!]!
+  findOneCategory(id: ID!): Category!
+  findOneProduct(id: ID!): Product!
+  findOneShop(id: ID!): Shop!
+  findOneUser(id: ID!): User!
+}
+
+type Shop {
+  id: ID!
+  name: String!
+}
+
+input UpdateCategoryDto {
+  name: String
+}
+
+input UpdateProductDto {
+  amount: Float
+  description: String
+  name: String
+  photo: String
+}
+
+input UpdateShopDto {
+  name: String
+}
+
+input UpdateUserDto {
+  email: String
+  name: String
+}
+
+type User {
+  created_at: DateTime!
+  email: String!
+  id: ID!
+  name: String
+  updated_at: DateTime!
+}
