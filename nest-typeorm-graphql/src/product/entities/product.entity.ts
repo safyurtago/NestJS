@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Category } from "../../category/entities/category.entity";
 
 
 @ObjectType()
@@ -24,4 +25,8 @@ export class Product {
   @Field({nullable: true})
   @Column({nullable: true})
   photo: string;
+
+  @ManyToOne((type) => Category, (category) => category.products)
+  @Field(() => Category)
+  category: Category;
 }

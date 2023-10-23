@@ -16,11 +16,11 @@ export class UsersService {
   }
 
   findAll(): Promise<User[]> {
-    return this.userRepo.find();
+    return this.userRepo.find({relations: ['posts']});
   }
 
   findOne(id: number): Promise<User> {
-    return  this.userRepo.findOne({where: {id}});
+    return  this.userRepo.findOne({where: {id}, relations: ['posts']});
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {

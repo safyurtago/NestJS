@@ -5,14 +5,22 @@
 type Category {
   id: ID!
   name: String!
+  products: [Product!]!
 }
 
 input CreateCategoryDto {
   name: String!
 }
 
+input CreatePostDto {
+  author: Int
+  content: String!
+  title: String!
+}
+
 input CreateProductDto {
   amount: Float!
+  category: Int
   description: String
   name: String!
   photo: String
@@ -34,21 +42,32 @@ scalar DateTime
 
 type Mutation {
   createCategory(createCategory: CreateCategoryDto!): Category!
-  createProduct(createProduct: CreateProductDto!): Product!
+  createPost(authorId: Float!, createPost: CreatePostDto!): Post!
+  createProduct(categoryId: Float!, createProduct: CreateProductDto!): Product!
   createShop(createShop: CreateShopDto!): Shop!
   createUser(createUser: CreateUserDto!): User!
   removeCategory(id: ID!): Float!
+  removePost(id: Float!): Float!
   removeProduct(id: ID!): Float!
   removeShop(id: ID!): Float!
   removeUser(id: ID!): Float!
   updateCategory(id: ID!, updateCategory: UpdateCategoryDto!): Category!
+  updatePost(id: Float!, updatePost: UpdatePostDto!): Post!
   updateProduct(id: Float!, updateProduct: UpdateProductDto!): Product!
   updateShop(id: ID!, updateShop: UpdateShopDto!): Shop!
   updateUser(id: ID!, updateUser: UpdateUserDto!): User!
 }
 
+type Post {
+  author: User!
+  content: String!
+  id: ID!
+  title: String!
+}
+
 type Product {
   amount: Float!
+  category: Category!
   description: String
   id: ID!
   name: String!
@@ -57,10 +76,12 @@ type Product {
 
 type Query {
   findAllCategory: [Category!]!
+  findAllPost: [Post!]!
   findAllProduct: [Product!]!
   findAllShop: [Shop!]!
   findAllUser: [User!]!
   findOneCategory(id: ID!): Category!
+  findOnePost(id: Float!): Post!
   findOneProduct(id: ID!): Product!
   findOneShop(id: ID!): Shop!
   findOneUser(id: ID!): User!
@@ -73,6 +94,11 @@ type Shop {
 
 input UpdateCategoryDto {
   name: String
+}
+
+input UpdatePostDto {
+  content: String!
+  title: String!
 }
 
 input UpdateProductDto {
@@ -96,5 +122,6 @@ type User {
   email: String!
   id: ID!
   name: String
+  posts: [Post!]!
   updated_at: DateTime!
 }
