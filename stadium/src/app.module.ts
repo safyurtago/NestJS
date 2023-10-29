@@ -46,12 +46,12 @@ const {env} = process;
     }),
     SequelizeModule.forRoot({
       dialect: 'postgres',
-      uri: "postgres://nnpwoede:3SbhD2tv3llKotINVoQiw6cbppcXBW47@rain.db.elephantsql.com/nnpwoede",
-      // port: Number(env.DATABASE_PORT),
-      // host: env.DATABASE_HOST,
-      // username: env.DATABASE_USER,
-      // password: env.DATABASE_PASSWORD,
-      // database: env.DATABASE_DB_NAME,
+      // uri: "postgres://nnpwoede:3SbhD2tv3llKotINVoQiw6cbppcXBW47@rain.db.elephantsql.com/nnpwoede",
+      port: Number(env.DATABASE_PORT),
+      host: env.DATABASE_HOST,
+      username: env.DATABASE_USER,
+      password: env.DATABASE_PASSWORD,
+      database: env.DATABASE_DB_NAME,
       models: [
         Otp,
         Bot,

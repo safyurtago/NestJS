@@ -1,4 +1,4 @@
 import { JwtPayload } from ".";
 
 
-export type JwtPayloadWithRefreshToken = JwtPayload & {refreshToke: string};
+export type JwtPayloadWithRefreshToken = JwtPayload & {refreshToken: string};
