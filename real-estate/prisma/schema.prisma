@@ -10,30 +10,36 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Admins {
-  id Int @id @default(autoincrement())
-  username String @unique
+model Admin {
+  id String @id @default(uuid())
   first_name String
   last_name String
-  phone_number String
-  hashedPassword String
-  hashedRefreshToken String?
+  username String
+  email String @unique
+  hashed_password String
+  hashed_refresh_token String?
+  is_active Boolean?
+  activation_link String?
 
-  createdAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
-  @@map("admins")
+  @@map("admin")
 }
 
-model Rieltors{
-  id Int @id @default(autoincrement())
-  firstname String
-  lastname String
-  phonenumber String
-  birthday_date String?
+model Rieltor {
+  id String @id @default(uuid())
+  first_name String
+  last_name String
+  username String
+  email String @unique
+  hashed_password String
+  hashed_refresh_token String?
+  is_active Boolean?
+  activation_link String?
 
-  createdAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
-  @@map("rieltors")
+  @@map("rieltor")
 }
