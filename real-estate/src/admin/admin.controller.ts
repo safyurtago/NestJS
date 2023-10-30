@@ -32,6 +32,7 @@ export class AdminController {
     return this.adminService.signin(authDto, res);
   }
 
+  @Public()
   @Post('signout')
   @HttpCode(HttpStatus.OK)
   signout(
